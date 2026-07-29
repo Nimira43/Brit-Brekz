@@ -5,8 +5,8 @@ class KanbanBoardApi {
 
   }
 
-  createNewTest(newTask) {
-    return apiClient.push('/tasks', newTask)
+  createNewTask(newTask) {
+    return apiClient.post('/tasks', newTask)
   }
 }
 

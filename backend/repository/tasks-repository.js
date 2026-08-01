@@ -12,6 +12,11 @@ class TaskRepository {
 
     return await task.save()
   }
+
+  async getAllTasks(query) {
+    
+    return await Task.find(query)
+  }
 }
 
 export default new TaskRepository()

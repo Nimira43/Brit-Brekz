@@ -4,7 +4,8 @@ import Swal from 'sweetalert2'
 class Dashboard {
   constructor() {
     this.createForm = document.querySelector('#newTaskForm')
-    this.render()
+    this.taskList = []
+    this.getAllTasksFromApi()
   }
 
   addCreateFormSubmitEventListener() {
@@ -40,6 +41,7 @@ class Dashboard {
 
     try {
       await KanbanBoardApi.createNewTask(task)
+      await this.getAllTasksFromApi()
       this.clearFieldsAfterSubmit()
     } catch (error) {
       console.log(error)
@@ -50,6 +52,16 @@ class Dashboard {
     (this.createForm.taskSummary.value = ''),
     (this.createForm.acceptanceCriteria.value = ''),
     (this.createForm.status.value = '')
+  }
+
+  async getAllTasksFromApi() {
+    try {
+      const res = await KanbanBoardApi.getAllTasks()
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+    this.render()
   }
 
   render() {

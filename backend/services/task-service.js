@@ -27,8 +27,6 @@ export const createTask = async (req, res) => {
   }
 }
 
-
-
 export const getAllTasks = async (req, res) => { 
   const currentUser = getCurrentUserFromRequest(req.user)
 

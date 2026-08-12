@@ -14,4 +14,6 @@ router.post(
   TaskController.createTask
 )
 
+router.delete('/:id', authCheck, TaskController.deleteTask)
+
 export default router

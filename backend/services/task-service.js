@@ -41,6 +41,19 @@ export const getAllTasks = async (req, res) => {
   }
 }
 
+export const deleteTask = async (req, res) => {
+  const currentUser = getCurrentUserFromRequest(req.user)
+
+  try {
+    await taskRespository.deleteTask(req.params.id, currentUser._id)
+
+    return res.status(200).json('Task deleted.')
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json('Something went wrong.')
+  }
+}
+
 const getCurrentUserFromRequest = (user, res) => {
   const currentUser = user
 

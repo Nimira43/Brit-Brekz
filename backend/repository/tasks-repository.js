@@ -14,8 +14,11 @@ class TaskRepository {
   }
 
   async getAllTasks(query) {
-    
     return await Task.find(query)
+  }
+
+  async deleteTask(id, userId) {
+    return await Task.findOneAndDelete({ _id: id, userId })
   }
 }
 

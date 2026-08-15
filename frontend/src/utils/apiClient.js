@@ -15,7 +15,7 @@ apiClient.interceptors.response.use(
   },
 
   (error) => {
-    if (error.response || error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       Swal.fire({
         icon: 'error',
         title: 'Alert!',
@@ -29,7 +29,7 @@ apiClient.interceptors.response.use(
       }, 3000)
     }
     return Promise.reject(error)
-  }  
+  }
 )
 
 export default apiClient

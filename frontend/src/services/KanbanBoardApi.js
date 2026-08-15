@@ -1,4 +1,4 @@
-import apiClient from '../utils/apiClient'
+import apiClient from '../utils/apiClient.js'
 
 class KanbanBoardApi {
   constructor() {
@@ -11,6 +11,14 @@ class KanbanBoardApi {
 
   getAllTasks() {
     return apiClient.get('/tasks')
+  }
+
+  updateTask(id, updates) {
+    return apiClient.put(`/tasks/${id}`, updates)
+  }
+
+  deleteTask(id) {
+    return apiClient.delete(`/tasks/${id}`)
   }
 }
 

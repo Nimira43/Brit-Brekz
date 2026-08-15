@@ -20,6 +20,14 @@ class TaskRepository {
   async deleteTask(id, userId) {
     return await Task.findOneAndDelete({ _id: id, userId })
   }
+
+  async updateTask(id, userId, data) {
+    return await Task.findOneAndUpdate(
+      { _id: id, userId },
+      { $set: data },
+      { new: true }
+    )
+  }
 }
 
 export default new TaskRepository()

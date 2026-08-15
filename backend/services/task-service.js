@@ -1,21 +1,18 @@
 import tasksRepository from '../repository/tasks-repository.js'
-import taskRepository from '../repository/tasks-repository.js'
 
-export const createTask = async (req, res) => { 
-  if (req.body.status === '') {
-    req.body.status = 'TO DO'
+export const createTask = async (req, res) => {
+  const currentUser = req.user
+
+  if (!currentUser) {
+    return res.status(401).json('Unauthorised - Task Service Layer.')
   }
 
-  // const currentUser = req.user
+  if (!req.body.status) {
+    req.body.status = 'TO_DO'
+  }
 
-  // if (!currentUser) { 
-  //   return res.status(401).json('Unauthorised - Task Service Layer.')
-  // }
-
-  const currentUser = getCurrentUserFromRequest(req.user)
-  
   try {
-    const newSavedTask = await taskRepository.createTask({
+    const newSavedTask = await tasksRepository.createTask({
       ...req.body,
       userId: currentUser._id,
     })
@@ -27,8 +24,12 @@ export const createTask = async (req, res) => {
   }
 }
 
-export const getAllTasks = async (req, res) => { 
-  const currentUser = getCurrentUserFromRequest(req.user)
+export const getAllTasks = async (req, res) => {
+  const currentUser = req.user
+
+  if (!currentUser) {
+    return res.status(401).json('Unauthorised - Task Service Layer.')
+  }
 
   try {
     const tasks = await tasksRepository.getAllTasks({
@@ -42,10 +43,14 @@ export const getAllTasks = async (req, res) => {
 }
 
 export const deleteTask = async (req, res) => {
-  const currentUser = getCurrentUserFromRequest(req.user)
+  const currentUser = req.user
+
+  if (!currentUser) {
+    return res.status(401).json('Unauthorised - Task Service Layer.')
+  }
 
   try {
-    await taskRespository.deleteTask(req.params.id, currentUser._id)
+    await tasksRepository.deleteTask(req.params.id, currentUser._id)
 
     return res.status(200).json('Task deleted.')
   } catch (error) {
@@ -54,12 +59,29 @@ export const deleteTask = async (req, res) => {
   }
 }
 
-const getCurrentUserFromRequest = (user, res) => {
-  const currentUser = user
+export const updateTask = async (req, res) => {
+  const currentUser = req.user
 
   if (!currentUser) {
     return res.status(401).json('Unauthorised - Task Service Layer.')
   }
 
-  return currentUser
+  const { taskSummary, acceptanceCriteria, status } = req.body
+
+  try {
+    const updatedTask = await tasksRepository.updateTask(
+      req.params.id,
+      currentUser._id,
+      { taskSummary, acceptanceCriteria, status }
+    )
+
+    if (!updatedTask) {
+      return res.status(404).json('Task not found.')
+    }
+
+    return res.status(200).json(updatedTask)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json('Something went wrong.')
+  }
 }

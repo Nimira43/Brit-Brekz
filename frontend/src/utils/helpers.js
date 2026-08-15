@@ -37,7 +37,7 @@ export const controlNavigation = () => {
 }
 
 function logout(e) {
-  console.log('logout fired')   
+  console.log('logout fired')
   e.preventDefault()
   store.auth.clearState()
   updateNavbar()
@@ -47,11 +47,10 @@ function logout(e) {
     text: 'To access Pharos, please log in again.',
     customClass: { confirmButton: 'main-btn' }
   })
-  navigateTo('/login')  
+  navigateTo('/login')
 }
 
-// Trial code - to control Swals
-// let logoutBound = false
+let logoutBound = false
 
 function updateNavbar() {
   const storeData = store.auth.getState()
@@ -62,15 +61,9 @@ function updateNavbar() {
   const logoutLink = document.getElementById('logout')
   const logoutContainer = document.getElementById('logout-container')
 
-  // Trial code - to control Swals
-  
-  // if (logoutLink && !logoutBound) {
-  //   logoutLink.addEventListener('click', logout)
-  //   logoutBound = true
-  // }
-
-  if (logoutLink) {
+  if (logoutLink && !logoutBound) {
     logoutLink.addEventListener('click', logout)
+    logoutBound = true
   }
 
   if (storeData?.isAuthenticated) {

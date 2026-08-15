@@ -9,6 +9,11 @@ export const router = async () => {
   const path = location.pathname || '/'
   const route = routes[path]
 
+  if (!route) {
+    app.innerHTML = '<h1>404 Page Not Found</h1>'
+    return
+  }
+
   runMiddleware(route, async () => {
     try {
       const res = await fetch(route.path)
@@ -17,7 +22,7 @@ export const router = async () => {
       bootstrap(path)
     } catch (error) {
       console.log(error)
-      app.innerHTML = '<h1>404 Page Not Found</h1>'    
+      app.innerHTML = '<h1>404 Page Not Found</h1>'
     }
   })
 }
